@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>アカウント登録</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .ml-10 ul li{
+            list-style: none;
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 flex flex-col items-center min-h-screen">
+    <header class="w-full bg-white shadow-md fixed top-0">
+        <div class="container mx-auto flex justify-between items-center p-4">
+            <h1 class="text-2xl font-bold text-blue-600">攻略サイト</h1>
+            <nav class="flex items-center space-x-4">
+                <a href="/" class="text-gray-600 hover:text-blue-500">ホーム</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 登録フォームコンテナ -->
+    <div class="register-container bg-white shadow-lg rounded-lg p-8 w-full max-w-md mx-4 mt-24">
+        <h2 class="text-2xl font-semibold mb-6 text-center">アカウント登録</h2>
+        <form action="{% url 'register' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="name" class="block text-left text-gray-700">名前</label>
+                <input type="text" id="username" name="username" aria-label="name" required
+                    class="w-full p-3 mt-1 border border-gray-300 rounded focus:outline-none focus:ring-2
+                    {% if form.username.errors %}
+                        ring-red-300 ring-2
+                    {% else %}
+                        focus:ring-blue-500
+                    {% endif %}">
+
+                {# エラー表示 #}
+                {% for error in form.username.errors %}
+                    <p class="text-red-500 text-sm font-medium text-left">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <div class="mb-4">
+                <label for="email" class="block text-left text-gray-700">メールアドレス</label>
+                <input type="email" id="email" name="email" required
+                    class="w-full p-3 mt-1 border border-gray-300 rounded focus:outline-none focus:ring-2
+                    {% if form.email.errors %}
+                        ring-red-300 ring-2
+                    {% else %}
+                        focus:ring-blue-500
+                    {% endif %}">
+
+                {% for error in form.email.errors %}
+                    <p class="text-red-500 text-sm font-medium text-left">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <div class="mb-4">
+                <label for="password" class="block text-left text-gray-700">パスワード</label>
+                <input type="password" id="password1" name="password1" required aria-label="password1"
+                    class="w-full p-3 mt-1 border border-gray-300 rounded focus:outline-none focus:ring-2
+                    {% if form.password1.errors %}
+                        ring-red-300 ring-2
+                    {% else %}
+                        focus:ring-blue-500
+                    {% endif %}">
+
+                {% for error in form.password1.errors %}
+                    <p class="text-red-500 text-sm font-medium text-left">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <div class="mb-6">
+                <label for="password_check" class="block text-left text-gray-700">パスワード確認</label>
+                <input type="password" id="password2" name="password2" required aria-label="password2"
+                    class="w-full p-3 mt-1 border border-gray-300 rounded focus:outline-none focus:ring-2
+                    {% if form.password2.errors %}
+                        ring-red-300 ring-2
+                    {% else %}
+                        focus:ring-blue-500
+                    {% endif %}">
+
+                {% for error in form.password2.errors %}
+                    <p class="text-red-500 text-sm font-medium text-left">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">登録</button>
+        </form>
+        <a href="{% url 'login' %}" class="block text-center text-blue-500 hover:underline mt-4">すでにアカウントをお持ちの方はこちら</a>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById("flyout-menu");
+            menu.classList.toggle('hidden');
+        }
+
+        // メニュー外クリックで閉じる
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById("flyout-menu");
+            const button = document.querySelector(".menu-btn");
+            if (!button.contains(event.target) && !menu.contains(event.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

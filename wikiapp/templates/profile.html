@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>プロフィール</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        #main_container{
+            margin-top: 50px;
+            margin-bottom: 30px;
+            width: 60%;
+            text-align: center;
+        }
+        main .text-2xl{
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+<header class="fixed top-0 w-full bg-white shadow-md">
+    <div class="container mx-auto flex justify-between items-center p-4">
+        <h1 class="text-2xl font-bold text-blue-600">攻略サイト</h1>
+        <ul>
+            <li><a href="/" class="text-gray-600 hover:text-blue-500 mr-8">ホーム</a></li>
+        </ul>
+    </div>
+</header>
+<main id="main_container" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg mt-8 p-6">
+    <h2 class="text-2xl font-bold text-center mb-6">アカウント情報の変更</h2>
+    <form>
+        <div class="mb-4">
+            <label for="acc_name" class="block text-sm font-medium mb-1">名前の変更</label>
+            <input type="text" id="acc_name" name="acc_name"
+                   class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300">
+        </div>
+        <div class="mb-4">
+            <label for="email" class="block text-sm font-medium mb-1">メールアドレスの変更</label>
+            <input type="email" id="email" name="email"
+                   class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300">
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm font-medium mb-1">アイコンの変更</label>
+            <input type="file" name="image" accept="image/*"
+                   class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none">
+        </div>
+    </form>
+    <div>
+        <button id="changePasswordBtn"
+                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500">パスワード変更</button>
+        <div id="passwordFlyout" class="hidden fixed top-0 left-0 w-full h-full bg-gray-700 bg-opacity-50 flex justify-center items-center">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-80">
+                <button class="closeBtn text-gray-500 hover:text-gray-700 text-xl absolute top-2 right-4">×</button>
+                <h3 class="text-lg font-bold text-center mb-4">パスワード変更</h3>
+                <form id="passwordChangeForm">
+                    <div class="mb-4">
+                        <label for="currentPassword" class="block text-sm font-medium mb-1">現在のパスワード</label>
+                        <input type="password" id="currentPassword"
+                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none">
+                    </div>
+                    <div class="mb-4">
+                        <label for="newPassword" class="block text-sm font-medium mb-1">新しいパスワード</label>
+                        <input type="password" id="newPassword"
+                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none">
+                    </div>
+                    <div class="mb-4">
+                        <label for="confirmPassword" class="block text-sm font-medium mb-1">新しいパスワードの確認</label>
+                        <input type="password" id="confirmPassword"
+                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none">
+                    </div>
+                    <button type="submit"
+                            class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500">変更する</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    document.getElementById('search-button').addEventListener('click', function () {
+        const query = document.getElementById('search-input').value;
+        if (query) {
+            alert('検索キーワード: ' + query);
+        } else {
+            alert('検索キーワードを入力してください');
+        }
+    });
+
+    document.querySelector('.menu-toggle').addEventListener('click', function () {
+        document.querySelector('.flyout-menu').classList.toggle('hidden');
+    });
+
+    document.getElementById('changePasswordBtn').addEventListener('click', function () {
+        document.getElementById('passwordFlyout').classList.remove('hidden');
+    });
+
+    document.querySelector('.closeBtn').addEventListener('click', function () {
+        document.getElementById('passwordFlyout').classList.add('hidden');
+    });
+</script>
+
+</body>
+</html>

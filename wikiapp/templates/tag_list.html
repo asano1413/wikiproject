@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>タグたちの居場所</title>
+</head>
+<body>
+    <h1>タグ一覧</h1>
+    <ul>
+        {% for tag in tags %}
+            <li><a href="{% url 'tag_content_list' tag.name %}">{{ tag.name }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

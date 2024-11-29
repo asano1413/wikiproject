@@ -1,0 +1,537 @@
+{% load static %}
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/x-icon" href="{% static 'jasufavi.ico' %}">
+    <title>ホーム</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background: linear-gradient(to right bottom,rgba(28,28,34,0.85),rgba(5,7,16,0.8));
+            padding-top: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
+            color: #fff;
+        }
+        .main_header {
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+        }
+        .main_header-left h1{
+            margin-left: 40px;
+            color: royalblue;
+        }
+        .main_header-left ul li{
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            height: 50px;
+            width: 100px;
+            padding-top: 10px;
+            border-color: royalblue;
+            border-width: 6px;
+            background-color: #223;
+            margin-left: 50px;
+            list-style: none;
+            display: inline-block;
+            text-align: center;
+        }
+        .main_header-left a{
+            text-decoration: none;
+            color: #eee;
+            font-weight: 700;
+        }
+        .main_header-left ul li:hover{
+            background-color: #556;
+            color: royalblue;
+            font-size: 15px;
+        }
+        .main_header-right {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .menu-toggle {
+            background: linear-gradient(to right bottom,rgba(77,77,99,1),rgba(65,105,225,0.2));
+            font-weight: 700;
+            margin-top: 18px;
+            color: #eee;
+            padding: 10px 15px;
+            border-color: royalblue;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: transform 1s ease-in-out, font-size 1s ease-in-ou;
+        }
+        .menu-toggle:hover {
+            background-color: #556;
+            transform: scale(1.1);
+            font-size: 13px;
+        }
+        .flyout-menu {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            width: 200px;
+            background-color: #223;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            border-color: royalblue;
+            display: none;
+            z-index: 10;
+        }
+        .flyout-menu.active {
+            display: block;
+        }
+        .flyout-menu ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .flyout-menu li {
+            border-bottom: 1px solid royalblue;
+        }
+        .flyout-menu li:last-child {
+            border-bottom: none;
+        }
+        .flyout-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: #eee;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .flyout-menu a:hover {
+            background-color: #667;
+            color: #fff;
+        }
+        .flyout-menu button {
+            display: block;
+            padding: 12px 20px;
+            width: 200px;
+            background-color: #223;
+            border-radius: 5px;
+            color: #eee;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .flyout-menu button:hover {
+            background-color: #667;
+            color: #fff;
+        }
+        header .make_post{
+            background: linear-gradient(to top, rgba(50, 50, 50, 1), rgba(0, 0, 0, 1));
+            height: 50px;
+            color: #fff;
+            margin: 0 15px;
+        }
+        header .make_post:hover{
+            font-weight: 700;
+            cursor: pointer;
+            background: linear-gradient(to top,rgb(170,170,170),rgb(200,200,200));
+            color: #111;
+            transform: scale(1.1);
+        }
+        .sub_header {
+            width: 85%;
+            height: 60px;
+            background-color: #112;
+            margin-left: 2%;
+            justify-content: center;
+            display: flex;
+            align-items: center;
+        }
+        .sub_header ul {
+            display: flex;
+            flex-grow: 1;
+            justify-content: space-evenly;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+        .sub_header ul li {
+            flex-grow: 1;
+            text-align: center;
+            border-style: solid;
+            border-color: royalblue;
+            background-color: #334;
+            list-style: none;
+            color: #000;
+            height: 52px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 50px;
+        }
+        .sub_header ul li:hover, .make_post:hover {
+            background-color: #555;
+            color: #fff;
+            transform: scale(1.1);
+        }
+        .sub_header a {
+            text-decoration: none;
+            color: #eee;
+            font-weight: 800;
+            display: block;
+            width: 60%;
+            height: 100%;
+            line-height: 52px;
+        }
+        .post_flyout-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+        }
+        .post_flyout-menu.active {
+            display: block;
+            top: 40%;
+            width: 40%;
+            height: 150px;
+            padding-top: 38px;
+            background-color: #445;
+            border-color: steelblue;
+        }
+        aside{
+            margin-top: 20px;
+            width: 13%;
+            height: 300px;
+            margin-right: 1%;
+            text-align: right;
+            background-color: #556;
+            color: #111;
+        }
+        .account_name{
+            font-weight: 800;
+            text-align: center;
+            padding-top: 15px;
+        }
+        .account_image{
+            width: 10%;
+            height: auto;
+            border-color: royalblue;
+            border-radius: 5px;
+        }
+        .content_like{
+            text-align: center;
+            font-size: 12px;
+        }
+        main{
+            background-color: #223;
+            display: flex;
+            justify-content: space-between;
+        }
+        .main_content{
+            width: 75%;
+            border-style: solid;
+            border-color: royalblue;
+            margin-left: 3%;
+            background-color: #556;
+            color: #eee;
+            text-align: center;
+            padding-top: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+        }
+        .main_content h1{
+            text-decoration: underline;
+        }
+        .main_content ul li{
+            list-style: none;
+        }
+        .post_content{
+            margin-left: 15%;
+            width: 70%;
+            text-align: center;
+            border-radius: 5px;
+            border-width: 3px;
+            border-color: royalblue;
+            border-style: solid;
+            background-color: #445;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        aside{
+            width: 15%;
+            margin-right: 3%;
+            text-align: right;
+            color: #eee;
+            box-shadow: 3px 3px #555;
+        }
+        .side_banner h2{
+            text-align: center;
+            margin-top: 15px;
+            margin-bottom: 25px;
+        }
+        .favorite_tags{
+            text-align: center;
+        }
+        .search-bar-container {
+            color: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #search-input {
+            width: 300px;
+            padding: 10px;
+            color: white;
+            background-color: #556;
+            border: 2px solid royalblue;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+        }
+        #search-button {
+            padding: 10px 20px;
+            background-color: #2139a1;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 0 5px 5px 0;
+        }
+        #search-button:hover {
+            background-color: #335;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .modal-content h3{
+            color: #335;
+        }
+        .modal-content button {
+            margin: 10px;
+        }
+        #scrollToTop {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          display: none;
+          background-color: #333;
+          color: #fff;
+          border: none;
+          padding: 10px 15px;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 18px;
+          z-index: 1000;
+        }
+        
+        #scrollToTop:hover {
+          background-color: #555;
+        }
+
+        #animation-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            font-size: 2rem;
+            font-family: Arial, sans-serif;
+            z-index: 1000;
+          }
+          .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+          }
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+    </style>
+</head>
+<body>
+{% block content %}
+    <header>
+        <div id="animation-container"></div>
+        <script>
+            const text = "(サイト名)へようこそ";
+            const container = document.getElementById("animation-container");
+    
+            function animateText() {
+              text.split("").forEach((char, index) => {
+                const span = document.createElement("span");
+                span.textContent = char;
+                span.classList.add("fade-in");
+                span.style.animationDelay = `${index * 0.1}s`;
+                container.appendChild(span);
+              });
+    
+              setTimeout(() => {
+                container.style.opacity = "0";
+                container.style.transition = "opacity 1s";
+              }, 2000);
+    
+              setTimeout(() => {
+                container.style.display = "none";
+              }, 3000)
+            }
+            window.addEventListener("load", animateText);
+          </script>
+        <div class="main_header">
+            <div class="main_header-left">
+                <h1>攻略ページ</h1>
+                <div class="main_header-content">
+                    <ul>
+                        <li><a href="/">ホーム</a></li>
+                        <li><a href="login/">ログイン</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="main_header-right">
+                <div class="search-bar-container">
+                    <input type="text" id="search-input" placeholder="検索キーワードを入力" aria-label="検索">
+                    <button type="button" id="search-button">検索</button>
+                </div>
+                <button class="menu-toggle">メニュー</button>
+                <div class="flyout-menu">
+                    <ul>
+                        <li><a href="profile/">プロフィール</a></li>
+                        <li><a href="post/">新規投稿作成</a></li>
+                        <li><a href="contact/">お問い合わせ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="sub_header">
+            <ul>
+                <li><a href="content1/">勉強用</a></li>
+                <li><a href="content2/">ゲーム</a></li>
+                <li><a href="content3/">雑多</a></li>
+            </ul>
+            <button class="make_post">投稿を作成</button>
+            <div class="post_flyout-menu">
+                <ul>
+                    <li><a href="post/">新規の投稿</a></li>
+                    <li><a href="comment/">コメント</a></li>
+                </ul>
+            </div>
+        </div>
+        <script>
+            document.getElementById('search-button').addEventListener('click', function() {
+                const query = document.getElementById('search-input').value;
+                if (query) {
+                    alert('検索キーワード: ' + query);
+                } else {
+                    alert('検索キーワードを入力してください');
+                }
+            });
+    
+            document.querySelector('.menu-toggle').addEventListener('click', function() {
+                document.querySelector('.flyout-menu').classList.toggle('active');
+            });
+            document.addEventListener('click', function(event) {
+                const flyoutMenu = document.querySelector('.flyout-menu');
+                const menuToggle = document.querySelector('.menu-toggle');
+                if (!flyoutMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+                    flyoutMenu.classList.remove('active');
+                }
+            });
+    
+            document.addEventListener('click', function(event) {
+                const flyoutMenu = document.querySelector('.post_flyout-menu');
+                const makePostButton = document.querySelector('.make_post');
+    
+                if (makePostButton.contains(event.target)) {
+                    flyoutMenu.classList.toggle('active');
+                }
+    
+                if (!flyoutMenu.contains(event.target) && !makePostButton.contains(event.target)) {
+                    flyoutMenu.classList.remove('active');
+                }
+            });
+            
+            document.getElementById('logoutButton').addEventListener('click', function() {
+                $('#logoutModal').modal('show');
+            });
+        </script>
+    </header>
+    <main>
+    <div class="main_content">
+        <h1>最新の投稿</h1>
+    </div>
+    <div class="top_button">
+        <button id="scrollToTop" onclick="scrollToTop()">↑</button>
+    </div>
+    <aside>
+        <div class="side_banner">
+            <h2>今人気のタグ</h2>
+            <div class="favorite_tags">
+                # ダミータグ
+            </div>
+        </div>
+    </aside>
+    <script>
+        function openModal() {
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+        function closeModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+        window.onscroll = function() {
+          const scrollButton = document.getElementById("scrollToTop");
+          if (document.documentElement.scrollTop > 200) {
+            scrollButton.style.display = "block";
+          } else {
+            scrollButton.style.display = "none";
+          }
+        };
+        
+        function scrollToTop() {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    
+        let commentsShown = 5;
+        function loadMoreComments() {
+            const comments = document.querySelectorAll("#comment-list .comment");
+            let hiddenComments = Array.from(comments).slice(commentsShown, commentsShown + 5);
+            hiddenComments.forEach(comment => {
+                comment.style.display = "block";
+            });
+            commentsShown += 5;
+            if (commentsShown >= comments.length) {
+                document.getElementById("load-more").style.display = "none";
+            }
+        }
+    </script>
+{% endblock %}
+</main>    
+</body>
+</html>

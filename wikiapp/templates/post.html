@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>投稿作成</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .ml-10 ul li{
+            list-style: none;
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+        .space-y-4 label{
+            margin-bottom: 10px;
+            margin-left: 50px;
+        }
+        .space-y-4 select{
+            margin-bottom: 10px;
+            margin-left: 50px;
+            padding: 6px 10px;
+            border: 3px solid royalblue;
+            border-radius: 10px;
+        }
+        .space-y-4 input{
+            margin-top: 25px;
+            margin-bottom: 10px;
+            margin-left: 55px;
+            border: 3px solid royalblue;
+            border-radius: 10px;
+            min-width: 200px;
+            max-width: 400px;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 7px;
+        }
+        .space-y-4 textarea{
+            margin-top: 25px;
+            margin-bottom: 10px;
+            margin-left: 30px;
+            border: 3px solid royalblue;
+            border-radius: 10px;
+            min-height: 100px;
+            min-width: 200px;
+            max-width: 400px;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 7px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen">
+<header class="bg-white shadow-md">
+    <div class="container mx-auto flex justify-between items-center p-4">
+        <div class="flex items-center">
+            <h1 class="text-2xl font-bold text-blue-600">攻略ページ</h1>
+            <nav class="ml-10">
+                <ul class="flex space-x-4">
+                    <li><a href="/" class="text-gray-600 hover:text-blue-500">ホーム</a></li>
+                    <li>
+                        {% if user.is_authenticated %}
+                            <a href="/logout" class="text-gray-600 hover:text-blue-500">ログアウト</a>
+                        {% else %}
+                            <a href="login/" class="block p-2 text-gray-600 hover:bg-gray-100">ログイン</a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="flex items-center space-x-4">
+            <div class="relative">
+{#                <input type="text" id="search-input" placeholder="検索キーワードを入力" aria-label="keyword" class="border border-gray-300 rounded-l-md p-2 focus:outline-none">#}
+                <button id="search-button" class="bg-blue-500 text-white p-2 rounded-r-md hover:bg-blue-600 focus:outline-none">検索</button>
+            </div>
+            <button class="menu-toggle bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-md focus:outline-none">メニュー</button>
+            <div class="flyout-menu absolute right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg hidden">
+                <ul class="divide-y divide-gray-200">
+                    <li>
+                        {% if user.is_authenticated %}
+                            <a href="/logout" class="text-gray-600 hover:text-blue-500">ログアウト</a>
+                        {% else %}
+                            <a href="login/" class="block p-2 text-gray-600 hover:bg-gray-100">ログイン</a>
+                        {% endif %}
+                    </li>
+                    <li><a href="profile/" class="block px-4 py-2 hover:bg-gray-100 text-gray-700">プロフィール</a></li>
+                    <li><a href="create/" class="block px-4 py-2 hover:bg-gray-100 text-gray-700">新規投稿作成</a></li>
+                    <li><a href="contact/" class="block px-4 py-2 hover:bg-gray-100 text-gray-700">お問い合わせ</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="bg-gray-50">
+        <div class="container mx-auto">
+            <ul class="flex justify-around py-3">
+                <li><a href="content1/" class="text-gray-600 hover:text-blue-500">勉強用</a></li>
+                <li><a href="#" class="text-gray-600 hover:text-blue-500">ゲーム</a></li>
+                <li><a href="#" class="text-gray-600 hover:text-blue-500">雑多</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<main class="container mx-auto my-10 p-6 bg-white shadow-lg rounded-lg max-w-2xl">
+    <h2 class="text-3xl font-bold text-center text-blue-600 mb-6">投稿の作成</h2>
+    <form method="POST" class="space-y-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="text-center">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                投稿
+            </button>
+        </div>
+    </form>
+</main>
+
+<script>
+    document.getElementById('search-button').addEventListener('click', function() {
+        const query = document.getElementById('search-input').value;
+        if (query) {
+            alert('検索キーワード: ' + query);
+        } else {
+            alert('検索キーワードを入力してください');
+        }
+    });
+
+    document.querySelector('.menu-toggle').addEventListener('click', function() {
+        document.querySelector('.flyout-menu').classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', function(event) {
+        const flyoutMenu = document.querySelector('.flyout-menu');
+        const menuToggle = document.querySelector('.menu-toggle');
+        if (!flyoutMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+            flyoutMenu.classList.add('hidden');
+        }
+    });
+</script>
+</body>
+</html>

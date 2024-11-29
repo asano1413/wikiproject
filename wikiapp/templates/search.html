@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>ホーム</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .text-3xl{
+            text-align: center;
+        }
+        .post_content{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 60%;
+            margin-left: 20%;
+        }
+        .ml-10 ul li{
+            list-style: none;
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+        .bg-gray-100 .container{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .bg-gray-100 .container ul li{
+            list-style: none;
+            margin-left: 100px;
+            margin-right: 100px;
+        }
+        .make_post{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        .container {
+            position: relative; /* 親要素にrelativeを設定 */
+        }
+        .flyout-menu {
+            position: absolute;
+            top: 100%; /* ボタンの下に表示 */
+            right: 0; /* 初期位置を右に設定 */
+            z-index: 1000; /* 他の要素より上に表示 */
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+<header class="bg-white shadow-md">
+    <div class="container mx-auto flex justify-between items-center p-4">
+        <div class="flex items-center">
+            <h1 class="text-2xl font-bold text-blue-600">攻略ページ</h1>
+            <nav class="ml-10">
+                <ul class="flex space-x-4">
+                    <li><a href="/" class="text-gray-600 hover:text-blue-500">ホーム</a></li>
+                    <li><a href="login/" class="text-gray-600 hover:text-blue-500">ログイン</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="flex items-center space-x-4">
+            <div class="relative">
+{#                <input type="text" id="search-input" placeholder="検索キーワードを入力" aria-label="keyword" class="border border-gray-300 rounded-l-md p-2 focus:outline-none">#}
+                <button id="search-button" class="bg-blue-500 text-white p-2 rounded-r-md hover:bg-blue-600 focus:outline-none">検索</button>
+            </div>
+            <button class="menu-toggle bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-md focus:outline-none">メニュー</button>
+            <div class="flyout-menu absolute right-0 mt-10 w-48 bg-white border border-gray-200 rounded-md shadow-lg hidden">
+                <ul class="divide-y divide-gray-200">
+                    <li class="p-2">
+                        {% if user.is_authenticated %}
+                            <button id="logoutButton" class="w-full text-left">ログアウト</button>
+                        {% else %}
+                            <a href="login/" class="block p-2 text-gray-600 hover:bg-gray-100">ログイン</a>
+                        {% endif %}
+                    </li>
+                    <li><a href="profile/" class="block p-2 text-gray-600 hover:bg-gray-100">プロフィール</a></li>
+                    <li><a href="post/" class="block p-2 text-gray-600 hover:bg-gray-100">新規投稿作成</a></li>
+                    <li><a href="contact/" class="block p-2 text-gray-600 hover:bg-gray-100">お問い合わせ</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="bg-gray-100">
+        <div class="container mx-auto">
+            <ul class="flex justify-around py-3">
+                <li><a href="content1/" class="text-gray-600 hover:text-blue-500">勉強用</a></li>
+                <li><a href="#" class="text-gray-600 hover:text-blue-500">ゲーム</a></li>
+                <li><a href="#" class="text-gray-600 hover:text-blue-500">雑多</a></li>
+            </ul>
+            <button class="make_post bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mx-auto block mt-2">投稿を作成</button>
+        </div>
+    </div>
+</header>
+<main class="container mx-auto my-6">
+    <h1>検索フォーム</h1>
+    <form method="get" action="{% url 'search' %}">
+        {{ form.as_p }}
+        <button type="submit">検索</button>
+    </form>
+
+    <h2>検索結果</h2>
+    {% if results %}
+        <ul>
+            {% for book in results %}
+                <li>{{ book.title }} - {{ book.author }}</li>
+            {% endfor %}
+        </ul>
+    {% elif results is not None %}
+        <p>該当する結果がありません。</p>
+    {% endif %}
+</main>
+<script>
+    document.getElementById('search-button').addEventListener('click', function() {
+        const query = document.getElementById('search-input').value;
+        if (query) {
+            alert('検索キーワード: ' + query);
+        } else {
+            alert('検索キーワードを入力してください');
+        }
+    });
+
+    document.querySelector('.menu-toggle').addEventListener('click', function() {
+        const flyoutMenu = document.querySelector('.flyout-menu');
+        flyoutMenu.classList.toggle('hidden');
+        if (!flyoutMenu.classList.contains('hidden')) {
+            // メニューの幅と位置を取得
+            const menuRect = flyoutMenu.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            if (menuRect.top < 0) {
+            const overflowY = -menuRect.top;
+            flyoutMenu.style.top = `${overflowY}px`;
+        } else {
+            flyoutMenu.style.top = ''; // リセット
+        }
+            // 画面右端に超えた場合の調整
+            if (menuRect.right > viewportWidth) {
+                const overflow = menuRect.right - viewportWidth;
+                flyoutMenu.style.left = `-${overflow}px`;
+            } else {
+                flyoutMenu.style.left = ''; // リセット
+            }
+            // 画面左端に超えた場合の調整
+            if (menuRect.left < 0) {
+                flyoutMenu.style.left = `0px`;
+            }
+        }
+    });
+
+    document.addEventListener('click', function(event) {
+        const flyoutMenu = document.querySelector('.flyout-menu');
+        const menuToggle = document.querySelector('.menu-toggle');
+        if (!flyoutMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+            flyoutMenu.classList.add('hidden');
+        }
+    });
+</script>
+</body>
+</html>

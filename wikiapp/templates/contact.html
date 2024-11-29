@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>ホーム</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .contact-container{
+            flex-wrap: wrap;
+            justify-content: space-around;
+            text-align: center;
+        }
+        .ml-10 ul li{
+            list-style: none;
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+        .bg-gray-100 .container{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .bg-gray-100 .container ul li{
+            list-style: none;
+            margin-left: 100px;
+            margin-right: 100px;
+        }
+        .container {
+            position: relative;
+        }
+        #contact_content{
+            min-height: 80px;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+<header class="w-full bg-white shadow-md fixed top-0">
+        <div class="container mx-auto flex justify-between items-center p-4">
+            <h1 class="text-2xl font-bold text-blue-600">攻略サイト</h1>
+            <nav class="flex items-center space-x-4">
+                <a href="/" class="text-gray-600 hover:text-blue-500">ホーム</a>
+            </nav>
+        </div>
+    </header>
+<main>
+    <div class="contact-container bg-white shadow-md rounded-lg p-8 max-w-md w-full mx-auto mt-24">
+        <h2 class="text-2xl font-semibold mb-6 text-center">お問い合わせ</h2>
+        <form action="{% url 'contact' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="contact_name" class="block text-left text-gray-700">件名</label>
+                <input type="text" id="contact_name" name="contact_name" required class="w-full p-3 mt-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label for="contact_content" class="block text-left text-gray-700">問い合わせ内容</label>
+                <input type="text" id="contact_content" name="contact_content" required class="w-full p-3 mt-1 border border-royalblue-500 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">送信</button>
+        </form>
+    </div>    
+</main>
+<script>
+    //検索バーのレイアウト等
+    document.getElementById('search-button').addEventListener('click', function() {
+        const query = document.getElementById('search-input').value;
+        if (query) {
+            alert('検索キーワード: ' + query);
+        } else {
+            alert('検索キーワードを入力してください');
+        }
+    });
+
+    document.querySelector('.menu-toggle').addEventListener('click', function() {
+        const flyoutMenu = document.querySelector('.flyout-menu');
+        flyoutMenu.classList.toggle('hidden');
+        if (!flyoutMenu.classList.contains('hidden')) {
+                                // メニューの幅と位置を取得
+            const menuRect = flyoutMenu.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            if (menuRect.top < 0) {
+            const overflowY = -menuRect.top;
+            flyoutMenu.style.top = `${overflowY}px`;
+        } else {
+            flyoutMenu.style.top = '';       // メニューの場所のリセット
+        }
+                                    // 画面右端に超えた場合の調整
+            if (menuRect.right > viewportWidth) {
+                const overflow = menuRect.right - viewportWidth;
+                flyoutMenu.style.left = `-${overflow}px`;
+            } else {
+                flyoutMenu.style.left = '';
+            }
+                                    // 画面左端に超えた場合の調整
+            if (menuRect.left < 0) {
+                flyoutMenu.style.left = `0px`;
+            }
+        }
+    });
+            //フライアウトメニューのれいあうと
+    document.addEventListener('click', function(event) {
+        const flyoutMenu = document.querySelector('.flyout-menu');
+        const menuToggle = document.querySelector('.menu-toggle');
+        if (!flyoutMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+            flyoutMenu.classList.add('hidden');
+        }
+    });
+</script>
+</body>
+</html>

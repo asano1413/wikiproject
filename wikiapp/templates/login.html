@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ログインページ</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .ml-10 ul li{
+            list-style: none;
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 flex justify-center items-center min-h-screen">
+    <header class="fixed top-0 w-full bg-white shadow-md">
+        <div class="container mx-auto flex justify-between items-center p-4">
+            <h1 class="text-2xl font-bold text-blue-600">攻略サイト</h1>
+            <nav class="flex items-center">
+                <a href="/" class="text-gray-600 hover:text-blue-500 mr-8">ホーム</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="login-container bg-white shadow-md rounded-lg p-8 max-w-md w-full mx-4 mt-24">
+        <h2 class="text-2xl font-semibold mb-6 text-center">ログイン</h2>
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="name" class="block text-left text-gray-700">名前</label>
+                <input type="text" id="username" name="username" required class="w-full p-3 mt-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="mb-6">
+                <label for="password" class="block text-left text-gray-700">パスワード</label>
+                <input type="password" id="password" name="password" required class="w-full p-3 mt-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">ログイン</button>
+        </form>
+        <a href="{% url 'register' %}" class="block text-center text-blue-500 hover:underline mt-4">アカウントをお持ちでない方はこちら</a>
+    </div>
+
+    <script>
+        // メニューフライアウトのトグル
+        document.querySelector('.flyout-menu').addEventListener('mouseenter', function() {
+            document.querySelector('.flyout-menu-content').classList.remove('hidden');
+        });
+
+        document.querySelector('.flyout-menu').addEventListener('mouseleave', function() {
+            document.querySelector('.flyout-menu-content').classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
